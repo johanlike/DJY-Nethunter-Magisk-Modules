@@ -1,3 +1,5 @@
+![DJY](Images/LOGO.jpg)
+
 #Magisk module expansion increment package
 
 Other Languages: [中文](README_ZH.md)

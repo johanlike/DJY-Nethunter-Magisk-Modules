@@ -1,3 +1,5 @@
+![DJY](Images/LOGO.jpg)
+
 # Magisk模块拓展增量包
 
 其他语言: [English](README.md)
