@@ -1,7 +1,10 @@
 # Magisk模块拓展增量包
 
+其他语言: [English](README.md)
 
 * ***当前版本DJY-V67***
+
+* ***相关配套内核[Oneplus6-oneplus6T点击我查看](https://johanlike.github.io/DJY-Oneplus6-or-Oneplus6T-Nethunter-Andrax-Kernel/)***
 
 * ***这个拓展模块适用于所有安卓版本所有已经安装了magisk的安卓手机***
 

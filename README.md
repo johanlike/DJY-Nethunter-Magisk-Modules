@@ -1,13 +1,17 @@
 #Magisk module expansion increment package
 
+Other Languages: [中文](README_ZH.md)
 
-* *** Current version DJY-V67 ***
 
-* *** This extension module is available for all Android versions. All Android phones with magicis installed***
+* ***Current version DJY-V67***
 
-* *** This module will save all apk in / sdcrad / apks / folder, if some apk is not installed correctly, please manually go to this folder to install. ***
+* ***Related supporting kernel[Oneplus6-oneplus6TClick me to view](https://johanlike.github.io/DJY-Oneplus6-or-Oneplus6T-Nethunter-Andrax-Kernel/)***
 
-* *** If you need to add your own app, please put the app into the apks folder, he will automatically detect and install. Then use the zip -r9 DJY.zip * command to package and flash in ***
+* ***This extension module is available for all Android versions. All Android phones with magicis installed***
+
+* ***This module will save all apk in / sdcrad / apks / folder, if some apk is not installed correctly, please manually go to this folder to install.***
+
+* ***If you need to add your own app, please put the app into the apks folder, he will automatically detect and install. Then use the zip -r9 DJY.zip * command to package and flash in***
 
 * If you need to modify the custom boot animation, please replace the /system/media/bootanimation.zip file and then use the zip -r9 DJY.zip * command to package and flash in
 
@@ -15,7 +19,7 @@
 
 * [Click I to download the latest version of Magisk Module Incremental Pack](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67/DJY-Magisk-Modules-V67.zip)
 
-* *** In order to prevent individual people from tampering with the source of this module installation package, please check the sha1sum value *** current sha1sum: 1ab60c5fb63d642a67a8f0b8488f651b8a7d26fc
+* ***In order to prevent individual people from tampering with the source of this module installation package, please check the sha1sum value*** current sha1sum: 1ab60c5fb63d642a67a8f0b8488f651b8a7d26fc
 
 ```
 ├── [       4096 May 12 21:55]  ./META-INF
