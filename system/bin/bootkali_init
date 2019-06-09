@@ -1,0 +1,215 @@
+#!/system/bin/sh
+
+## Edited by simonpunk2013@xda, redectro@xda ##
+
+######### Determine which busybox binary to use #########
+if [ -x /system/xbin/busybox_nh ]; then
+	busybox=/system/xbin/busybox_nh
+elif [ -x /system/xbin/busybox ]; then
+	busybox=/system/xbin/busybox
+elif [ -x /system/bin/busybox ]; then
+	busybox=/system/bin/busybox
+elif [ -x /data/adb/magisk/busybox ]; then
+	busybox=/data/adb/magisk/busybox
+else
+	bklog "[-] Busybox not found!  Install it, dummy!"
+	exit 1
+fi
+
+######### VARIABLES #########
+mnt=/data/local/nhsystem/kali-armhf
+nhsys=/data/local/nhsystem
+chroot_image=/sdcard/kali-chroot.img ## for File method
+nhfiles=/sdcard/nh_files
+is_Dir_or_File=""
+######### CHECK FOR ENCRYPTION #########
+isEncrypted=false
+[ "$(getprop ro.crypto.state)" = "encrypted" ] && isEncrypted=true
+
+######### CHECK IF CHROOT DIR EXISTS #########
+f_chk_chroot() {
+	[ ! -d $mnt ] && bklog "[-] $mnt directory is not found." && return 1
+	[ ! -f $mnt/usr/bin/sudo -a ! -f $chroot_image ] && bklog "[-] No chroot image file or possible chroot file exists." && return 1
+	[ -f $mnt/usr/bin/sudo ] && is_Dir_or_File="Directory" && bklog "[+] Found existing chroot directory." && return 0
+	[ -f $chroot_image ] && is_Dir_or_File="File" && bklog "[+] Found existing chroot image file." && return 0
+}
+
+######### CHECK IF FS IS ALL MOUNTED ALREADY #########
+f_isAllReady(){
+    fs=(proc sys dev dev/pts sdcard)
+    for i in "${fs[@]}"; do
+        if [ "$(grep $mnt/$i /proc/mounts)" ]; then
+            bklog "[+] $i was mounted already."
+            continue
+        else
+            bklog "[-] $i is not yet mounted."
+            return 1
+        fi
+    done
+
+	[ ! -e "/dev/net/tun" ] && return 1
+    [ ! -e "/dev/fd" -o ! -e "/dev/stdin" -o ! -e "/dev/stdout" -o ! -e "/dev/stderr" ] && return 1
+	bklog "[+] The Kali chroot has been started already." && return 0
+}
+
+######### MOUNT SDCARD #########
+
+f_mount_sdcard() {
+	if [ -d "$mnt/sdcard" ]; then
+		mountpoint -q "$mnt/sdcard" && return 0
+	fi
+	mkdir -p $mnt/sdcard
+	for sdcard in \
+		"$EXTERNAL_STORAGE" \
+		/storage/emulated/0 \
+		/storage/emulated/legacy \
+		/storage/sdcard0 \
+		/sdcard
+	do
+		[ -d "$sdcard" ] &&
+			$busybox mount -o bind "$sdcard" "$mnt/sdcard" && bklog "[+] binded sdcard" &&
+				return 0
+	done
+	return 1
+}
+
+f_mount_external_sd() {
+	if [ -d "$mnt/external_sd" ]; then
+		mountpoint -q "$mnt/external_sd" && return 0
+	fi
+	mkdir -p $mnt/external_sd
+	for external_sd in \
+		/storage/extSdCard \
+		/storage/sdcard1 \
+		/storage/external_sd \
+		/external_sd
+	do
+		[ -d "$external_sd" ] &&
+			$busybox mount -o bind "$external_sd" "$mnt/external_sd" && bklog "[+] binded external_sd" &&
+				return 0
+	done
+	return 1
+}
+
+f_mount_chroot_image() {
+	if [ "$(losetup -a | grep $chroot_image)" ]; then
+		bklog "[!] $chroot_image is already mounted as loop device."
+		if [ "$($busybox mount $(losetup -a | grep $chroot_image | awk -F':' '{print $1}') $mnt)" ]; then
+			bklog "[-] Failed to mount image. Please verify the image is valid." && exit 1
+		else
+			bklog "[+] mounted $chroot_image to $mnt"
+		fi
+	else
+		if [ "$($busybox mount -o loop $chroot_image $mnt)" ]; then
+			bklog "[-] Failed to mount image. Please verify the image is valid." && exit 1
+		else
+			bklog "[+] mounted $chroot_image to $mnt"
+		fi
+	fi
+}
+
+
+######### [ MOUNTING AND BINDING FILESYSTEM ] #########
+f_mount_fs_to_kali() {
+	$busybox mount -o remount,suid /data && chmod +s $mnt/usr/bin/sudo
+	######### SET FD, Thanks @feefik and @zer0conf ########
+	if [ ! -e "/dev/fd" -o ! -e "/dev/stdin" -o ! -e "/dev/stdout" -o ! -e "/dev/stderr" ]; then
+		[ -e "/dev/fd" ] || ln -s /proc/self/fd /dev/ && bklog "[+] linked /proc/self/fd to /dev/"
+		[ -e "/dev/stdin" ] || ln -s /proc/self/fd/0 /dev/stdin && bklog "[+] linked /proc/self/fd/0 to /dev/stdin"
+		[ -e "/dev/stdout" ] || ln -s /proc/self/fd/1 /dev/stdout && bklog "[+] linked /proc/self/fd/2 to /dev/stdout"
+		[ -e "/dev/stderr" ] || ln -s /proc/self/fd/2 /dev/stderr && bklog "[+] linked /proc/self/fd/3 to /dev/stderr"
+	fi
+
+	######### SET TUN ########
+	if [ ! -e "/dev/net/tun" ]; then
+		[ ! -d "/dev/net" ] && mkdir -p /dev/net
+		mknod /dev/net/tun c 10 200 && bklog "[+] created /dev/net/tun"
+	fi
+
+	######### SET DEV ########
+	if [ ! "$(mountpoint $mnt/dev 2> /dev/null | grep 'is a')" ]; then
+		[ ! -d $mnt/dev ] && mkdir -p $mnt/dev
+		$busybox mount -o bind /dev $mnt/dev && bklog "[+] binded /dev"
+	fi
+
+	######### SET DEV PTS ########
+	if [ ! "$(mountpoint $mnt/dev/pts 2> /dev/null | grep 'is a')" ]; then
+		$busybox mount -t devpts devpts $mnt/dev/pts && bklog "[+] mounted /dev/pts"
+	fi
+
+	######### SET DEV SHM ########
+	if [ ! "$(mountpoint $mnt/dev/shm 2> /dev/null | grep 'is a')" ]; then
+		[ ! -d $mnt/dev/shm ] && mkdir -p $mnt/dev/shm
+		$busybox mount -o rw,nosuid,nodev,mode=1777 -t tmpfs tmpfs $mnt/dev/shm && bklog "[+] mounted /dev/shm"
+	fi
+
+	######### SET PROC ########
+	if [ ! "$(mountpoint $mnt/proc 2> /dev/null | grep 'is a')" ]; then
+		[ ! -d $mnt/proc ] && mkdir -p $mnt/proc
+		$busybox mount -t proc proc $mnt/proc && bklog "[+] mounted /proc"
+	fi
+
+	######### SET SYS ########
+	if [ ! "$(mountpoint $mnt/sys 2> /dev/null | grep 'is a')" ]; then
+		[ ! -d $mnt/sys ] && mkdir -p $mnt/sys
+		$busybox mount -t sysfs sys $mnt/sys && bklog "[+] mounted /sys"
+	fi
+
+	######### SET INTERNAL | EXTERNAL SDCARD | USBDISK ########
+	f_mount_sdcard
+	f_mount_external_sd
+
+	#########
+	$busybox chmod 666 /dev/null
+
+	######### SET 250MB TO ALLOW POSTGRESQL #########
+	$busybox sysctl -w kernel.shmmax=268435456
+
+	######### SET DNS ########
+	> $mnt/etc/resolv.conf # empty dns entries
+	for i in 1 2 3 4; do
+		if [ -z "$(getprop net.dns${i})" ]; then
+			# we go through 1-4 dns servers and break out of loop on empty
+			break
+		else
+ 			# add local/device dns server first
+			echo "nameserver $(getprop net.dns${i})" >> $mnt/etc/resolv.conf
+		fi
+	done
+
+	# lastly add two default dns entries
+	echo "nameserver 208.67.222.222" >> $mnt/etc/resolv.conf
+	echo "nameserver 208.67.220.220" >> $mnt/etc/resolv.conf
+	chmod 644 $mnt/etc/resolv.conf
+
+	######### SET NETWORK AND HOSTNAME ########
+	$busybox sysctl -w net.ipv4.ip_forward=1
+	echo "127.0.0.1		 localhost kali" > $mnt/etc/hosts
+	echo "::1				 localhost ip6-localhost ip6-loopback" >> $mnt/etc/hosts
+	echo "kali" > $mnt/proc/sys/kernel/hostname
+
+	######### Setup done #########
+	bklog "[+] The Kali chroot has been started."
+}
+
+##################################
+########## Main Script ###########
+##################################
+
+######### First to check if chroot directory exists #########
+bklog "[!] Checking chroot environment."
+f_chk_chroot
+res=$?
+if [ $res -eq 1 ]; then
+	bklog "[-] Please check again. Aborted."
+	exit 1
+fi
+
+## Lastly check if all Filesystems are mounted.
+f_isAllReady
+res=$?
+if [ $res -eq 1 ]; then
+	bklog "[!] Mounting fs to kali chroot."
+	[ "$is_Dir_or_File" == "File" ] && f_mount_chroot_image
+	f_mount_fs_to_kali
+fi

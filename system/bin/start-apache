@@ -1,0 +1,5 @@
+unset LD_PRELOAD
+busybox chroot /data/local/nhsystem/kali-armhf /bin/bash -c "chmod 777 /dev/null"
+busybox chroot /data/local/nhsystem/kali-armhf /bin/bash -c "/etc/init.d/apache2 start"
+
+

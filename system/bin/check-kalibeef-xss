@@ -1,0 +1,6 @@
+unset LD_PRELOAD
+if [[ $(ps | grep ruby | grep 116) ]]; then
+	echo "1"
+else
+	echo "0"
+fi

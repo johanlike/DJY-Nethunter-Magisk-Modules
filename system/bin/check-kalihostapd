@@ -1,0 +1,6 @@
+unset LD_PRELOAD
+if [[ $(ps | grep hostapd) ]]; then
+    echo "1"
+else
+    echo "0"
+fi

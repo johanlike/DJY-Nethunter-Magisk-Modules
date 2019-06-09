@@ -1,0 +1,7 @@
+unset LD_PRELOAD
+if [[ $(ps | grep dnsmasq) ]]; then
+    echo "1"
+else
+    echo "0"
+fi
+
