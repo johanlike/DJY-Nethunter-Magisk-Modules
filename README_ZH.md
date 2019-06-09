@@ -18,9 +18,11 @@
 
 * Magisk模块拓展增量包是我收集了大部分主流的应用程序，自定义开机动画和无线固件拓展增量包。我会在向Magisk官方提交相关模块和代码，到时候你们就可以直接在MagiskAPP里面下载我的模块了。以下是相关App和固件：
 
-* [点击我下载最新版本Magisk模块增量包](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67/DJY-Magisk-modules-V67.zip)
+* [点击我下载最新版本Magisk模块增量包](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67/DJY-Magisk-modules-V67.zip)***为防止个别有心人员篡改此模块安装包来源，请效验sha1sum值当前sha1sum***：1ab60c5fb63d642a67a8f0b8488f651b8a7d26fc
 
-* ***为防止个别有心人员篡改此模块安装包来源，请效验sha1sum值***当前sha1sum：1ab60c5fb63d642a67a8f0b8488f651b8a7d26fc
+* [点击我下载最新版本Magisk模块增量包此版本不包含Lucky Patcher](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67-NO-Lucky-Patcher/DJY-Magisk-modules-V67-No-Lucky-Patcher.zip) ***为防止个别有心人员篡改此模块安装包来源，请效验sha1sum值***当前sha1sum：aad5cc4fcb8bc3fdebe7871e1714dfca98db6436
+
+
 
 ```
 ├── [       4096 May 12 21:55]  ./META-INF
@@ -56,7 +58,6 @@
 │   ├── [    4804885 May 28 21:44]  ./apks/shadowsocks-arm64-v8a-4.8.0.apk
 │   ├── [   10845337 Jun  1 09:19]  ./apks/juicessh-2.1.4.apk
 │   ├── [    7553899 Jun  3 08:03]  ./apks/whid.apk
-│   ├── [    7573496 Jun  7 09:48]  ./apks/Lucky-Patcher-Official-8.4.3.apk
 │   ├── [    5643092 Jun  9 22:50]  ./apks/nethunter-app.apk             <<<Android Studio 3.6Canany3(191.5618338)编译于2019-6-9
 │   ├── [   11354644 Jun  9 22:52]  ./apks/linux_deploy.apk              <<<Android Studio 3.6Canany3(191.5618338)编译于2019-6-9
 │   ├── [    7779063 Jun  9 22:54]  ./apks/Hijacker.apk                  <<<Android Studio 3.6Canany3(191.5618338)编译于2019-6-9

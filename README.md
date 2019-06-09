@@ -19,9 +19,10 @@ Other Languages: [中文](README_ZH.md)
 
 * Magisk Module Extension Increment Pack is my collection of most mainstream applications, custom boot animations and wireless firmware extension increment packages. I will submit the relevant modules and code to Magisk officially, and you will be able to go directly to MagiskAPP. Download my module The following are related applications and firmware:
 
-* [Click I to download the latest version of Magisk Module Incremental Pack](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67/DJY-Magisk-Modules-V67.zip)
+* [Click I to download the latest version of Magisk Module Incremental Pack](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67/DJY-Magisk-Modules-V67.zip)***In order to prevent individual people from tampering with the source of this module installation package, please check the sha1sum value*** current sha1sum: 1ab60c5fb63d642a67a8f0b8488f651b8a7d26fc
 
-* ***In order to prevent individual people from tampering with the source of this module installation package, please check the sha1sum value*** current sha1sum: 1ab60c5fb63d642a67a8f0b8488f651b8a7d26fc
+* [Click I to download the latest version of Magisk module increment package. This version does not contain Lucky Patcher.](https://github.com/johanlike/DJY-Nethunter-Magisk-Modules/releases/download/DJY-Magisk-modules-V67-NO-Lucky-Patcher/DJY-Magisk-modules-V67-No-Lucky-Patcher.zip)***In order to prevent individual people from tampering with the source of this module installation package, please check the sha1sum value*** current sha1sum: aad5cc4fcb8bc3fdebe7871e1714dfca98db6436
+
 
 ```
 ├── [       4096 May 12 21:55]  ./META-INF
@@ -57,7 +58,6 @@ Other Languages: [中文](README_ZH.md)
 │   ├── [    4804885 May 28 21:44]  ./apks/shadowsocks-arm64-v8a-4.8.0.apk
 │   ├── [   10845337 Jun  1 09:19]  ./apks/juicessh-2.1.4.apk
 │   ├── [    7553899 Jun  3 08:03]  ./apks/whid.apk
-│   ├── [    7573496 Jun  7 09:48]  ./apks/Lucky-Patcher-Official-8.4.3.apk
 │   ├── [    5643092 Jun  9 22:50]  ./apks/nethunter-app.apk             <<< Android Studio 3.6Canany3 (191.5618338) compiled on 2019-6-9
 │   ├── [   11354644 Jun  9 22:52]  ./apks/linux_deploy.apk              <<< Android Studio 3.6Canany3 (191.5618338) compiled on 2019-6-9
 │   ├── [    7779063 Jun  9 22:54]  ./apks/Hijacker.apk                  <<< Android Studio 3.6Canany3 (191.5618338) compiled on 2019-6-9
