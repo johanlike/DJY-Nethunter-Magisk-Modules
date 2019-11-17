@@ -1,6 +1,6 @@
-id=OP6-OP6T-NH_Wireless_Firmware_And_Apps
-name=OP6-OP6T-NH_Wireless_Firmware_And_Apps
-version=v67
-versionCode=6700
+id=NetHunter-Firmware
+name=NetHunter-Firmware
+version=v68
+versionCode=6800
 author=DJY
-description=This module adds the NH Wireless Firmware  And  Apps
+description=This module adds firmware and basic Nethunter apps
