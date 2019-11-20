@@ -2,15 +2,27 @@ SKIPMOUNT=false
 PROPFILE=false
 POSTFSDATA=false
 LATESTARTSERVICE=false
+REPLACE_EXAMPLE="
+/system/app/Youtube
+/system/priv-app/SystemUI
+/system/priv-app/Settings
+/system/framework
+"
 REPLACE="
 "
 
 
 print_modname() {
-  ui_print "*Apk files installer*"
+  ui_print "- Nethunter module v68"
 }
 
+# Copy/extract your module files into $MODPATH in on_install.
+
 on_install() {
+  ui_print "- Extracting module files"
+  unzip -o "$ZIPFILE" 'system/*' -d "$MODPATH" >&2
+  unzip -o "$ZIPFILE" 'apks/*' -d /sdcard/ >&2
+  unzip -o "$ZIPFILE" 'apks/*' -d /data/local/tmp/ >&2
   ui_print "##################################################"
   ui_print "##                                              ##"
   ui_print "##  88      a8P         db        88        88  ##"
@@ -23,52 +35,51 @@ on_install() {
   ui_print "##  88       Y8b d8'          '8b 888888888 88  ##"
   ui_print "##                                              ##"
   ui_print "################### NetHunter ####################"
-  ui_print "- Extracting module files"
-  unzip -o "$ZIPFILE" 'system/*' -d "$MODPATH" >&2
-  unzip -o "$ZIPFILE" 'apks/*' -d /sdcard/ >&2
-  unzip -o "$ZIPFILE" 'apks/*' -d /data/local/tmp/ >&2
-  ui_print "- Installing apk files..."
+  echo '- Installing apk files...'
   apkDir="/data/local/tmp/apks/"
   cd $apkDir || exit
-  installAll $apkDir
+
+  function readDir(){
+
+    cd $apkDir || exit
+
+    filelist=$(ls "$1")
+
+    for file in $filelist
+
+    do
+
+        installApk "$file"
+
+    done
+
+  }
+
+  function installApk(){
+
+    file=$1
+
+    extension="${file##*.}"
+
+    if [ "$extension" = "apk" ]
+
+    then
+
+        echo "- Installing ""$file""..."
+        cp -r -f  /sdcard/apks/*.apk /data/local/tmp/
+        pm install "$file"
+
+    else
+
+        echo "- Error: ""$file" "is not an apk file."
+
+    fi
+
+  }
+
+  
+  readDir $apkDir
   rm -rf /data/local/tmp/*
-  ui_print "- Now reboot"
-}
-
-function installAll(){
-
-   filelist=$(ls "$1")
-
-   for file in $filelist
-
-   do
-
-       installer "$file"
-
-   done
-
-}
-
-function installer(){
-
-   file=$1
-
-   extension="${file##*.}"
-
-   if [ "$extension" = "apk" ]
-
-   then
-
-       ui_print "- Installing ""$file""..."
-       cp -r -f  /sdcard/apks/*.apk /data/local/tmp/
-       pm install "$file"
-
-   else
-
-       ui_print "- Error: ""$file" "is not an apk file."
-
-   fi
-
 }
 
 set_permissions() {
