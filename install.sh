@@ -82,6 +82,5 @@ installApk() {
 
 cleanup() {
   ui_print "- Cleaning up..."
-  rm -rf /sdcard/Android/obbs
   rm -rf /data/local/tmp/*
 }
